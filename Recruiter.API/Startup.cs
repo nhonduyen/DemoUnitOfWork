@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Recruiter.Infrastructure;
+using Recruiter.API.Extensions;
 
 namespace Recruiter.API
 {
@@ -32,6 +34,9 @@ namespace Recruiter.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recruiter.API", Version = "v1" });
             });
+            services
+                .AddDatabase(Configuration)
+                .AddServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
