@@ -16,13 +16,15 @@ namespace Management.API.Services
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IUserRepository _userRepository;
         private readonly ISalaryRepository _salaryRepository;
+        private readonly CryptoService _cryptoService;
 
-        public DepartmentService(IAppUnitOfWork unitOfWork, IDepartmentRepository departmentRepository, IUserRepository userRepository, ISalaryRepository salaryRepository)
+        public DepartmentService(IAppUnitOfWork unitOfWork, IDepartmentRepository departmentRepository, IUserRepository userRepository, ISalaryRepository salaryRepository, CryptoService cryptoService)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _salaryRepository = salaryRepository;
             _departmentRepository = departmentRepository;
+            _cryptoService = cryptoService;
         }
 
         public async Task<int> AddAllEntityAsync()
@@ -31,8 +33,9 @@ namespace Management.API.Services
             var department = _departmentRepository.AddDepartment(departmentName);
 
             var username = $"user_{Guid.NewGuid():N}";
+            var password = _cryptoService.ComputeSha256Hash(username);
             var email = $"{Guid.NewGuid():N}@gmail.com";
-            var user = _userRepository.NewUser(username, email, department);
+            var user = _userRepository.NewUser(username, email, department, password);
 
             decimal coefficientSalary = new Random().Next(1, 15);
             decimal workdays = 22;

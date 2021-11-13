@@ -19,8 +19,8 @@ namespace Management.API.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            await _departmentService.AddAllEntityAsync();
-            return Ok();
+            var result = await _departmentService.AddAllEntityAsync();
+            return Ok(result);
         }
     }
 }

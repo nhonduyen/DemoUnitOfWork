@@ -22,5 +22,6 @@ namespace Management.Domain.Users
         [ForeignKey(nameof(DepartmentId))]
         public virtual Department Department { get; set; }
         public virtual ICollection<Salary> Salaries { get; set; }
+        public string Password { get; set; }
     }
 }

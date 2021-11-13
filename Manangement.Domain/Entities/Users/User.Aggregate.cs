@@ -6,11 +6,12 @@ namespace Management.Domain.Users
 {
     public partial class User
     {
-        public User(string username, string email, Department department) : base()
+        public User(string username, string email, Department department, string password) : base()
         {
             Department = department;
             UserName = username;
             Email = email;
+            Password = password;
         }
 
         public bool ValidOnAdd()

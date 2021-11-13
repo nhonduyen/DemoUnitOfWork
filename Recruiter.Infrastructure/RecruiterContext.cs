@@ -59,6 +59,7 @@ namespace Recruiter.Infrastructure
         #region table
         public DbSet<Recruiter.Domain.Model.Recruiter> Recruiter { get; set; }
         public DbSet<Candidate> Candidate { get; set; }
+        public DbSet<User> User { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

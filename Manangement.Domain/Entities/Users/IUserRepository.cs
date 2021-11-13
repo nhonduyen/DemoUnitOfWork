@@ -5,6 +5,6 @@ namespace Management.Domain.Users
 {
     public interface IUserRepository : IAppRepository<User>
     {
-        User NewUser(string username, string email, Department department);
+        User NewUser(string username, string email, Department department, string password);
     }
 }

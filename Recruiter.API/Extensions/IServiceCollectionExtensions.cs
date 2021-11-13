@@ -28,7 +28,9 @@ namespace Recruiter.API.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
-                .AddScoped<IRecruiterService, RecruiterService>();
+                .AddScoped<IRecruiterService, RecruiterService>()
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<ICryptoService, CryptoService>();
         }
     }
 }
