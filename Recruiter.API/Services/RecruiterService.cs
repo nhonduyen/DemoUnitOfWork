@@ -6,6 +6,8 @@ using Recruiter.Domain.Model;
 using Recruiter.Infrastructure;
 using Recruiter.API.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Recruiter.API.ViewModel.Responses.Candidate;
+using Recruiter.API.ViewModel.Requests.Candidate;
 
 namespace Recruiter.API.Services
 {
@@ -60,5 +62,29 @@ namespace Recruiter.API.Services
             return candidates;
         }
 
+        public async Task<GetCandidatesResult> GetCandidatePagingAsync(GetCandidatesRequest request)
+        {
+            var result = new GetCandidatesResult();
+
+            var candidates = await _recruiterUow.Repository<Recruiter.Domain.Model.Recruiter>()
+                .AsNoTracking()
+                .Include(x => x.Candidates)
+                .Select(x => new CandidateResultVM
+                {
+                    RecruiterId = x.Id,
+                    RecruiterName = x.Name,
+                    Candidates = x.Candidates.Select(a => new CandidateVM
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        RecruiterId = a.RecruiterId
+                    }).ToList()
+                })
+                .SortBy(x => x.RecruiterId, request.payload.sorting.direction)
+                .ThenBy(x => x.RecruiterName, request.payload.sorting.direction)
+                .ToListPagedAsync(request.payload, result.data);
+            result.data.Candidates = candidates;
+            return result;
+        }
     }
 }
