@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Recruiter.Infrastructure;
 using Recruiter.API.Services;
 using Microsoft.EntityFrameworkCore;
+using Recruiter.Infrastructure.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace Recruiter.API.Extensions
 {
@@ -24,13 +26,21 @@ namespace Recruiter.API.Extensions
             return services;
         }
 
+        public static IServiceCollection AddLogger(this IServiceCollection services)
+        {
+            return services
+                .AddSingleton<ILoggerFactory, LoggerFactory>()
+                .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
+                .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+        }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
                 .AddScoped<IRecruiterService, RecruiterService>()
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<ICryptoService, CryptoService>();
+                .AddScoped<ICryptoService, CryptoService>()
+                .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
         }
     }
 }
