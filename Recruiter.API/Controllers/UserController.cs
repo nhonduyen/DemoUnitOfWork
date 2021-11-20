@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Recruiter.API.Services;
 using Recruiter.API.ViewModel.Requests.User;
 using Recruiter.Infrastructure.Logger;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Recruiter.API.Controllers
 {
@@ -23,6 +24,16 @@ namespace Recruiter.API.Controllers
             _logger = logger;
         }
 
+        [Authorize]
+        [HttpGet]
+        public IActionResult LoggedUser()
+        {
+            var message = "Hello authorized user";
+            _logger.Log(message);
+            return Ok(message);
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -31,11 +42,11 @@ namespace Recruiter.API.Controllers
                 _logger.Log("Validate user identity");
                 if (request.payload == null || string.IsNullOrEmpty(request.payload.username) || string.IsNullOrEmpty(request.payload.password))
                     return Unauthorized();
-                var loggedInUser = await _userService.Login(request.payload.username, request.payload.password);
-                if (loggedInUser == null)
+                var token = await _userService.ProcessLogin(request.payload.username, request.payload.password);
+                if (token == null)
                     return Unauthorized();
-                _logger.Log($"User logged in {loggedInUser.UserName.Trim()} - {DateTime.UtcNow}", loggedInUser);
-                return Ok(loggedInUser);
+                _logger.Log($"User logged in {request.payload.username.Trim()} - {DateTime.UtcNow}");
+                return Ok(token);
             }
             catch(Exception ex)
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Recruiter.Domain.Model;
 using Recruiter.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
 namespace Recruiter.API.Services
 {
@@ -12,11 +13,15 @@ namespace Recruiter.API.Services
     {
         private readonly RecruiterContext _recruiterContext;
         private readonly ICryptoService _cryptoService;
+        private readonly IAuthenService _authenService;
+        private readonly IConfiguration _configuration;
 
-        public UserService(RecruiterContext recruiterContext, ICryptoService cryptoService)
+        public UserService(RecruiterContext recruiterContext, ICryptoService cryptoService, IAuthenService authenService, IConfiguration configuration)
         {
             _recruiterContext = recruiterContext;
             _cryptoService = cryptoService;
+            _authenService = authenService;
+            _configuration = configuration;
         }
         public async Task<User> Login(string username, string password)
         {
@@ -33,6 +38,15 @@ namespace Recruiter.API.Services
                 })
                 .FirstOrDefaultAsync();
             return result;
+        }
+
+        public async Task<TokenInfo> ProcessLogin(string username, string password)
+        {
+            var loggedUser = await Login(username, password);
+            if (loggedUser == null)
+                return null;
+            var token = _authenService.RequestToken(loggedUser, _configuration);
+            return token;
         }
     }
 }

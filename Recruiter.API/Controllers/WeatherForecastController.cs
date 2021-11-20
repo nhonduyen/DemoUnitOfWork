@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Recruiter.API.Controllers
 {
@@ -23,6 +24,7 @@ namespace Recruiter.API.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

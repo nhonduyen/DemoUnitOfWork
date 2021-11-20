@@ -13,6 +13,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Recruiter.Infrastructure;
 using Recruiter.API.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace Recruiter.API
 {
@@ -28,7 +32,7 @@ namespace Recruiter.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            var shareKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityToken:Key"]));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -37,7 +41,31 @@ namespace Recruiter.API
             services
                 .AddLogger()
                 .AddDatabase(Configuration)
-                .AddServices();
+                .AddServices()
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        // Clock skew compensates for server time drift.
+                        // We recommend 5 minutes or less:
+                        ClockSkew = TimeSpan.FromMinutes(5),
+                        // Specify the key used to sign the token:
+                        IssuerSigningKey = shareKey,
+                        RequireSignedTokens = true,
+                        // Ensure the token audience matches our audience value (default true):
+                        ValidAudience = Configuration["JwtSecurityToken:Issuer"],
+                        ValidateAudience = true,
+                        // Ensure the token was issued by a trusted authorization server (default true):
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["JwtSecurityToken:Issuer"],
+                        // Ensure the token hasn't expired:
+                        RequireExpirationTime = true,
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +81,13 @@ namespace Recruiter.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                HttpOnly = HttpOnlyPolicy.Always
+            });
 
             app.UseAuthorization();
 

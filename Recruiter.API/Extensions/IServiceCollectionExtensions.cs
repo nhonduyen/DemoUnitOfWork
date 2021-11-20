@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Recruiter.Infrastructure;
 using Recruiter.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Recruiter.Infrastructure.Logger;
 using Microsoft.Extensions.Logging;
+using Recruiter.API.Service;
 
 namespace Recruiter.API.Extensions
 {
@@ -40,6 +37,7 @@ namespace Recruiter.API.Extensions
                 .AddScoped<IRecruiterService, RecruiterService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<ICryptoService, CryptoService>()
+                .AddScoped<IAuthenService, AuthenService>()
                 .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
         }
     }
