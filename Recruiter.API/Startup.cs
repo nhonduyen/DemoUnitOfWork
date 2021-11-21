@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http;
 
 namespace Recruiter.API
 {
@@ -39,6 +40,7 @@ namespace Recruiter.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recruiter.API", Version = "v1" });
             });
             services
+                .AddHttpContextAccessor()
                 .AddLogger()
                 .AddDatabase(Configuration)
                 .AddServices()
@@ -57,7 +59,7 @@ namespace Recruiter.API
                         IssuerSigningKey = shareKey,
                         RequireSignedTokens = true,
                         // Ensure the token audience matches our audience value (default true):
-                        ValidAudience = Configuration["JwtSecurityToken:Issuer"],
+                        ValidAudience = Configuration["JwtSecurityToken:Audience"],
                         ValidateAudience = true,
                         // Ensure the token was issued by a trusted authorization server (default true):
                         ValidateIssuer = true,

@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Recruiter.Domain.Model;
 using Microsoft.Extensions.Configuration;
 using Recruiter.API.Services;
+using Recruiter.API.Common.Constants;
 
 namespace Recruiter.API.Service
 {
@@ -16,19 +17,18 @@ namespace Recruiter.API.Service
             try
             {
                 var claims = new[]
-                 {
-                   new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                   new Claim(JwtRegisteredClaimNames.Sub, user.DepartmentId.ToString()),
-                   new Claim(JwtRegisteredClaimNames.Sub, user.UserName.Trim()),
+                {
+                   new Claim(CustomClaimTypes.UserId, user.Id.ToString()),
+                   new Claim(CustomClaimTypes.Username, user.UserName.Trim()),
                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                   new Claim(JwtRegisteredClaimNames.Sub, user.Email.Trim())
-               };
+                   new Claim(CustomClaimTypes.Email, user.Email.Trim())
+                };
                 var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityToken:Key"]));
                 var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     issuer: configuration["JwtSecurityToken:Issuer"],
-                    audience: configuration["JwtSecurityToken:Issuer"],
+                    audience: configuration["JwtSecurityToken:Audience"],
                     claims: claims,
                     expires: DateTime.UtcNow.AddMinutes(10),
                     signingCredentials: signingCredentials

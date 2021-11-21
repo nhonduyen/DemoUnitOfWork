@@ -11,24 +11,25 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Recruiter.API.Controllers
 {
+    [Authorize]
     [Route("[controller]/[action]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : SecureBaseController
     {
         private readonly IUserService _userService;
         private readonly IAppLogger<UserController> _logger;
 
-        public UserController(IUserService userService, IAppLogger<UserController> logger)
+        public UserController(IUserService userService, IAppLogger<UserController> logger, IHttpContextAccessor httpContextAccessor
+        ) : base(httpContextAccessor)
         {
             _userService = userService;
             _logger = logger;
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult LoggedUser()
         {
-            var message = "Hello authorized user";
+            var message = $"Hello authorized user id {UserInfo.UserId} access token {AccessToken}";
             _logger.Log(message);
             return Ok(message);
         }
@@ -46,12 +47,13 @@ namespace Recruiter.API.Controllers
                 if (token == null)
                     return Unauthorized();
                 _logger.Log($"User logged in {request.payload.username.Trim()} - {DateTime.UtcNow}");
+                Response.Cookies.Append("X-Access-Token", token.Token);
                 return Ok(token);
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                return StatusCode(500);
+                var result = HandleException(ex);
+                return result;
             }
         }
     }
