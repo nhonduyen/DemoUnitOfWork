@@ -1,7 +1,7 @@
-﻿using Recruiter.API.ViewModel.Attributes;
+﻿using Recruiter.Core.Entities.ViewModel.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace Recruiter.API.ViewModel.Requests
+namespace Recruiter.Core.Entities.ViewModel.Requests
 {
     public class BaseRequestPayload
     {

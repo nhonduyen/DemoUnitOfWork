@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Recruiter.API.ViewModel.Requests
+namespace Recruiter.Core.Entities.ViewModel.Requests
 {
     public class BaseRequest
     {

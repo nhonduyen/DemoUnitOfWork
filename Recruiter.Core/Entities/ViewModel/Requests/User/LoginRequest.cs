@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Recruiter.API.ViewModel.Requests.User
+namespace Recruiter.Core.Entities.ViewModel.Requests.User
 {
     public class LoginRequest
     {

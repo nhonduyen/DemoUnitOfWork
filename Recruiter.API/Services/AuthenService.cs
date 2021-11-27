@@ -3,16 +3,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Recruiter.Domain.Model;
+using Recruiter.Core.Entities.DbModel;
 using Microsoft.Extensions.Configuration;
 using Recruiter.API.Services;
 using Recruiter.API.Common.Constants;
+using Recruiter.Core.Entities.ViewModel.Requests;
+using Recruiter.Core.Entities.ViewModel;
 
 namespace Recruiter.API.Service
 {
     public class AuthenService : IAuthenService
     {
-        public TokenInfo RequestToken(User user, IConfiguration configuration)
+        public TokenInfoVM RequestToken(User user, IConfiguration configuration)
         {
             try
             {
@@ -33,7 +35,7 @@ namespace Recruiter.API.Service
                     expires: DateTime.UtcNow.AddMinutes(10),
                     signingCredentials: signingCredentials
                 );
-                return new TokenInfo
+                return new TokenInfoVM
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                     Expiration = jwtSecurityToken.ValidTo

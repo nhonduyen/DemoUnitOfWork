@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Recruiter.Core\Recruiter.Core.csproj" />
     <ProjectReference Include="..\Recruiter.Domain\Recruiter.Domain.csproj" />
   </ItemGroup>
 

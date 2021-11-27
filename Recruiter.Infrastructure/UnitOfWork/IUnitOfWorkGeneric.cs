@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Recruiter.Domain.Model;
+using Recruiter.Core.Entities.DbModel.Bases;
 using System.Threading.Tasks;
 
 namespace Recruiter.Infrastructure

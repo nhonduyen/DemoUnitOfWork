@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Recruiter.Core.Entities.ViewModel.Requests;
+using Recruiter.Core.Entities.ViewModel.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Recruiter.API.ViewModel.Requests;
-using Recruiter.API.ViewModel.Responses;
+using Microsoft.EntityFrameworkCore;
 
-namespace Recruiter.API.ViewModel
+namespace Recruiter.Core.Helper
 {
     public static class PagingHelper
     {

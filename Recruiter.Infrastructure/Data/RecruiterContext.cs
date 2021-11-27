@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Options;
-using Recruiter.Domain.Model;
+using Recruiter.Core.Entities.DbModel;
+using Recruiter.Core.Entities.DbModel.Bases;
 
 namespace Recruiter.Infrastructure
 {
@@ -57,14 +58,14 @@ namespace Recruiter.Infrastructure
         }
 
         #region table
-        public DbSet<Recruiter.Domain.Model.Recruiter> Recruiter { get; set; }
+        public DbSet<Recruiter.Core.Entities.DbModel.Recruiter> Recruiter { get; set; }
         public DbSet<Candidate> Candidate { get; set; }
         public DbSet<User> User { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Domain.Model.Recruiter>()
+            modelBuilder.Entity<Recruiter.Core.Entities.DbModel.Recruiter>()
                 .HasIndex(a => a.Id)
                 .HasDatabaseName("Recruiter_Id")
                 .IsUnique();

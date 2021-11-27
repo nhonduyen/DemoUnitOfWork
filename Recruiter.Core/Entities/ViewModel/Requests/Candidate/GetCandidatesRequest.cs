@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Recruiter.API.ViewModel.Requests.Candidate
+namespace Recruiter.Core.Entities.ViewModel.Requests.Candidate
 {
     public class GetCandidatesRequest : BaseRequest
     {
@@ -10,6 +10,6 @@ namespace Recruiter.API.ViewModel.Requests.Candidate
 
     public class GetCandidatesRequestPayload : BaseRequestPayload
     {
-       public int numberFromRequest { get; set; }
+        public int numberFromRequest { get; set; }
     }
 }

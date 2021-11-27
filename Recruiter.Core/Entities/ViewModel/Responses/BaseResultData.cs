@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Recruiter.API.Common.Constants;
+using Recruiter.Core.Common.Constants;
 
-namespace Recruiter.API.ViewModel.Responses
+namespace Recruiter.Core.Entities.ViewModel.Responses
 {
     public class BaseResultData
     {

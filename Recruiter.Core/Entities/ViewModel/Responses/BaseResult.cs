@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Recruiter.API.ViewModel.Responses
+namespace Recruiter.Core.Entities.ViewModel.Responses
 {
     public class BaseResult
     {
@@ -40,6 +39,5 @@ namespace Recruiter.API.ViewModel.Responses
     public class Paging
     {
         public int? total { get; set; }
-
     }
 }

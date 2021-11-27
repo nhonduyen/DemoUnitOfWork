@@ -11,9 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Recruiter.Core\Recruiter.Core.csproj" />
     <ProjectReference Include="..\Recruiter.Domain\Recruiter.Domain.csproj" />
     <ProjectReference Include="..\Recruiter.Infrastructure\Recruiter.Infrastructure.csproj" />
-    <ProjectReference Include="..\Recruiter.Service\Recruiter.Service.csproj" />
+    <ProjectReference Include="..\Recruiter.Service\Recruiter.Services.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

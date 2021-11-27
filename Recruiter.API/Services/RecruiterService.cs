@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Recruiter.Domain.Model;
 using Recruiter.Infrastructure;
-using Recruiter.API.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Recruiter.API.ViewModel.Responses.Candidate;
-using Recruiter.API.ViewModel.Requests.Candidate;
+using Recruiter.Core.Entities.ViewModel.Requests.Candidate;
+using Recruiter.Core.Entities.ViewModel.Responses.Candidate;
+using RecruiterDBModel = Recruiter.Core.Entities.DbModel;
+using Recruiter.Core.Entities.DbModel;
+using Recruiter.Core.Helper;
 
 namespace Recruiter.API.Services
 {
@@ -22,7 +23,7 @@ namespace Recruiter.API.Services
         }
         public async Task<int> AddCandidate()
         {
-            var recruiter = new Domain.Model.Recruiter();
+            var recruiter = new RecruiterDBModel.Recruiter();
             recruiter.Name = $"rec_{Guid.NewGuid():N}";
 
             var candidate1 = new Candidate();
@@ -36,22 +37,22 @@ namespace Recruiter.API.Services
             _recruiterContext.Repository<Candidate>().AddRange(candidate1, candidate2);
             recruiter.Candidates.Add(candidate1);
             recruiter.Candidates.Add(candidate2);
-            _recruiterContext.Repository<Domain.Model.Recruiter>().Add(recruiter);
+            _recruiterContext.Repository<RecruiterDBModel.Recruiter>().Add(recruiter);
 
             var result = await _recruiterUow.SaveChangesAsync();
             return result;
         }
 
-        public async Task<List<VMCandidate>> GetCandidate()
+        public async Task<List<CandidateResultVM>> GetCandidate()
         {
-            var candidates = await _recruiterUow.Repository<Recruiter.Domain.Model.Recruiter>()
+            var candidates = await _recruiterUow.Repository<Recruiter.Core.Entities.DbModel.Recruiter>()
                 .AsNoTracking()
                 .Include(x => x.Candidates)
-                .Select(x => new VMCandidate
+                .Select(x => new CandidateResultVM
                 {
                     RecruiterId = x.Id,
                     RecruiterName = x.Name,
-                    Candidates = x.Candidates.Select(a => new Candidate
+                    Candidates = x.Candidates.Select(a => new CandidateVM
                     {
                         Id = a.Id,
                         Name = a.Name,
@@ -66,7 +67,7 @@ namespace Recruiter.API.Services
         {
             var result = new GetCandidatesResult();
 
-            var candidates = await _recruiterUow.Repository<Recruiter.Domain.Model.Recruiter>()
+            var candidates = await _recruiterUow.Repository<Recruiter.Core.Entities.DbModel.Recruiter>()
                 .AsNoTracking()
                 .Include(x => x.Candidates)
                 .Select(x => new CandidateResultVM

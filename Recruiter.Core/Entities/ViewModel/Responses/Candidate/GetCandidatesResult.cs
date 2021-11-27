@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Recruiter.API.ViewModel.Responses.Candidate
+namespace Recruiter.Core.Entities.ViewModel.Responses.Candidate
 {
     public class GetCandidatesResult : BaseResult
     {

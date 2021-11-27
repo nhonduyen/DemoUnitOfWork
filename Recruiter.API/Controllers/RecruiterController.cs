@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Recruiter.API.Services;
-using Recruiter.API.ViewModel.Requests.Candidate;
+using Recruiter.Core.Entities.ViewModel.Requests.Candidate;
 
 namespace Recruiter.API.Controllers
 {
@@ -22,8 +18,8 @@ namespace Recruiter.API.Controllers
         [HttpGet]
         public async Task<IActionResult> AddCandidates()
         {
-            await _recruiterService.AddCandidate();
-            return Ok();
+            var numCandidates = await _recruiterService.AddCandidate();
+            return Ok(numCandidates);
         }
 
         [HttpGet]

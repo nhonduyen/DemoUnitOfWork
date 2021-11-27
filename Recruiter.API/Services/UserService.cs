@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Recruiter.Domain.Model;
+using Recruiter.Core.Entities.DbModel;
 using Recruiter.Infrastructure;
 using Microsoft.Extensions.Configuration;
+using Recruiter.Core.Entities.ViewModel.Requests;
+using Recruiter.Core.Entities.ViewModel;
 
 namespace Recruiter.API.Services
 {
@@ -40,7 +42,7 @@ namespace Recruiter.API.Services
             return result;
         }
 
-        public async Task<TokenInfo> ProcessLogin(string username, string password)
+        public async Task<TokenInfoVM> ProcessLogin(string username, string password)
         {
             var loggedUser = await Login(username, password);
             if (loggedUser == null)

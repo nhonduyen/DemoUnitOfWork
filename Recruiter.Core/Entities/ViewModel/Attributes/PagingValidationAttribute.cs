@@ -1,9 +1,9 @@
-﻿using Recruiter.API.ViewModel.Requests;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Recruiter.Core.Entities.ViewModel.Requests;
 
-namespace Recruiter.API.ViewModel.Attributes
+namespace Recruiter.Core.Entities.ViewModel.Attributes
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public class PagingValidationAttribute : ValidationAttribute

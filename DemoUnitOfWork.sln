@@ -31,7 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{B9
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Management", "Management\Management.sqlproj", "{66CE7627-B2FE-43ED-A476-A2E996198603}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recruiter.Service", "Recruiter.Service\Recruiter.Service.csproj", "{BFB68C91-D981-4125-AEBD-3A66AFE0E737}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recruiter.Services", "Recruiter.Service\Recruiter.Services.csproj", "{BFB68C91-D981-4125-AEBD-3A66AFE0E737}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recruiter.Core", "Recruiter.Core\Recruiter.Core.csproj", "{D95F1AB4-248C-4254-82A2-DF891CAABB1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{BFB68C91-D981-4125-AEBD-3A66AFE0E737}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFB68C91-D981-4125-AEBD-3A66AFE0E737}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFB68C91-D981-4125-AEBD-3A66AFE0E737}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D95F1AB4-248C-4254-82A2-DF891CAABB1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D95F1AB4-248C-4254-82A2-DF891CAABB1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D95F1AB4-248C-4254-82A2-DF891CAABB1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D95F1AB4-248C-4254-82A2-DF891CAABB1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{0F277703-4105-4EBB-B85A-B713C6E6C20E} = {2FCAB9B5-1DA3-4F9C-922D-DC7BC890EE76}
 		{66CE7627-B2FE-43ED-A476-A2E996198603} = {B9270B38-5AE6-4785-A8E1-F1F90EEC4235}
 		{BFB68C91-D981-4125-AEBD-3A66AFE0E737} = {2FCAB9B5-1DA3-4F9C-922D-DC7BC890EE76}
+		{D95F1AB4-248C-4254-82A2-DF891CAABB1B} = {2FCAB9B5-1DA3-4F9C-922D-DC7BC890EE76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A7735365-ACF6-48D7-BE2C-A7BB6E410597}

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using Recruiter.Domain.Model;
+﻿using Microsoft.Extensions.Configuration;
+using Recruiter.Core.Entities.DbModel;
+using Recruiter.Core.Entities.ViewModel;
+using Recruiter.Core.Entities.ViewModel.Requests;
 
 namespace Recruiter.API.Services
 {
     public interface IAuthenService
     {
-        public TokenInfo RequestToken(User user, IConfiguration configuration);
+        public TokenInfoVM RequestToken(User user, IConfiguration configuration);
     }
 }

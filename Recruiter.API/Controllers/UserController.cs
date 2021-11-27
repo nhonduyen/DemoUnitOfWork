@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Recruiter.API.Services;
-using Recruiter.API.ViewModel.Requests.User;
 using Recruiter.Infrastructure.Logger;
 using Microsoft.AspNetCore.Authorization;
+using Recruiter.Core.Controllers;
+using Recruiter.Core.Entities.ViewModel.Requests.User;
 
 namespace Recruiter.API.Controllers
 {
@@ -29,7 +28,7 @@ namespace Recruiter.API.Controllers
         [HttpGet]
         public IActionResult LoggedUser()
         {
-            var message = $"Hello authorized user id {UserInfo.UserId} access token {AccessToken}";
+            var message = $"Hello authorized user id {UserInfo.UserId} username {UserInfo.UserName} access token {AccessToken}";
             _logger.Log(message);
             return Ok(message);
         }

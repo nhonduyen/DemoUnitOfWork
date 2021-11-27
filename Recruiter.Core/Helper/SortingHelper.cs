@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Recruiter.Core.Common.Enums;
+using Recruiter.Core.Entities.ViewModel.Requests;
+using Recruiter.Core.Entities.ViewModel.Responses;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Recruiter.API.Common.Enums;
-using Recruiter.API.ViewModel.Requests;
-using Recruiter.API.ViewModel.Responses;
+using System.Text;
 
-namespace Recruiter.API.ViewModel
+namespace Recruiter.Core.Helper
 {
     public static class SortingHelper
     {
