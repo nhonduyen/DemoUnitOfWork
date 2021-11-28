@@ -45,5 +45,21 @@ namespace Management.API.Services
 
             return result;
         }
+
+        public Department GetDepartmentById(Guid id)
+        {
+            var department = _departmentRepository.GetDepartmentById(id);
+
+            return department;
+        }
+
+        public async Task<int> AddDepartmentAsync(Department department)
+        {
+            _departmentRepository.Add(department);
+
+            var result = await _unitOfWork.CommitAsync();
+
+            return result;
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace Recruiter.API
             services
                 .AddHttpContextAccessor()
                 .AddLogger()
+                .AddHttpClient()
                 .AddDatabase(Configuration)
                 .AddServices()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

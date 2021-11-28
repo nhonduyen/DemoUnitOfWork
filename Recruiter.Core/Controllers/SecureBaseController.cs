@@ -24,17 +24,11 @@ namespace Recruiter.Core.Controllers
         protected Guid? GetUserIdAuthentication(HttpContext httpContext)
         {
             StringValues authorization = AccessToken;
-            if (authorization.Count > 0)
+            if (!string.IsNullOrEmpty(authorization))
             {
-                const string bearerIndex = "bearer ";
-                var indexToken = authorization.First().ToLower().IndexOf(bearerIndex, StringComparison.Ordinal);
-                if (indexToken == 0)
-                {
-                    var token = authorization.First().Substring(bearerIndex.Length);
-                    JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-                    JwtSecurityToken tokenS = handler.ReadToken(token) as JwtSecurityToken;
-                    return Guid.Parse(tokenS.Payload[CustomClaimTypes.UserId].ToString());
-                }
+                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+                JwtSecurityToken tokenS = handler.ReadToken(authorization) as JwtSecurityToken;
+                return Guid.Parse(tokenS.Payload[CustomClaimTypes.UserId].ToString());
             }
             return null;
         }

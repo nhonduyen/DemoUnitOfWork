@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Recruiter.Infrastructure.Logger;
 using Microsoft.Extensions.Logging;
 using Recruiter.API.Service;
+using Recruiter.Services.Interface;
+using Recruiter.Services.Implement;
 
 namespace Recruiter.API.Extensions
 {
@@ -38,7 +40,8 @@ namespace Recruiter.API.Extensions
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<ICryptoService, CryptoService>()
                 .AddScoped<IAuthenService, AuthenService>()
-                .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+                .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
+                .AddScoped<IHttpClientService, HttpClientService>();
         }
     }
 }

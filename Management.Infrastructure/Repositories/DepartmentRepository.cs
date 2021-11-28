@@ -3,6 +3,7 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Shared.Infrastructure;
 using Shared.Domain.Base;
+using System.Linq;
 
 namespace Management.Infrastructure.Repositories
 {
@@ -21,6 +22,11 @@ namespace Management.Infrastructure.Repositories
                 return department;
             }
             throw new Exception("Invalid deparment");
+        }
+
+        public Department GetDepartmentById(Guid id)
+        {
+            return this.DbSet.Where(x => x.Id == id).FirstOrDefault();
         }
     }
 }
