@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Recruiter.API.Service;
 using Recruiter.Services.Interface;
 using Recruiter.Services.Implement;
+using Recruiter.Infrastructure.Repositories.Implements;
 
 namespace Recruiter.API.Extensions
 {
@@ -36,7 +37,9 @@ namespace Recruiter.API.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
+                .AddScoped<ICandidateService, CandidateService>()
                 .AddScoped<IRecruiterService, RecruiterService>()
+                .AddScoped<ICandidateService, CandidateService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<ICryptoService, CryptoService>()
                 .AddScoped<IAuthenService, AuthenService>()

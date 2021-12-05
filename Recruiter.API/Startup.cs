@@ -39,6 +39,7 @@ namespace Recruiter.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recruiter.API", Version = "v1" });
             });
+            services.ConfigureRepository();
             services
                 .AddHttpContextAccessor()
                 .AddLogger()
