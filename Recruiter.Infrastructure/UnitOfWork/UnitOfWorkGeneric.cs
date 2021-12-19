@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Recruiter.Core.Entities.DbModel.Bases;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Recruiter.Infrastructure.Extensions;
 
 namespace Recruiter.Infrastructure
 {
@@ -53,6 +55,11 @@ namespace Recruiter.Infrastructure
                 // implement dispose here
             }
             disposed = true;
+        }
+
+        public async Task<List<TEntity>> GetLargeWhereInSqlTempTableAsync<TEntity>(List<Guid> listWhereInIds, Func<bool, List<TEntity>> func, int maxWhereIn = 300)
+        {
+            return await _dataContext.GetLargeWhereInSqlTempTable(listWhereInIds, func, maxWhereIn);
         }
     }
 }

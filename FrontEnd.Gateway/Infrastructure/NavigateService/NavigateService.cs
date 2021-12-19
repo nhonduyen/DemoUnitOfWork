@@ -1,4 +1,5 @@
-﻿using FrontEnd.Gateway.Extensions.RestExtension;
+﻿using FrontEnd.Gateway.Extensions;
+using FrontEnd.Gateway.Extensions.RestExtension;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net;
+using static FrontEnd.Gateway.Extensions.RestExtension.RestOptions;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace FrontEnd.Gateway.Infrastructure.NavigateService
 {
@@ -28,14 +33,15 @@ namespace FrontEnd.Gateway.Infrastructure.NavigateService
             _logger = logger;
         }
 
-        public RestOptions.Service GetService(string serviceName)
+        public Service GetService(string serviceName)
         {
-            throw new NotImplementedException();
+            var services = GetServices();
+            return services.SingleOrDefault(x => x.Name.Equals(serviceName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public List<RestOptions.Service> GetServices()
+        public List<Service> GetServices()
         {
-            throw new NotImplementedException();
+            return _restSettings.GetOptions<List<Service>>("ApiResources");
         }
 
         public Task<string> NavigateApi(string serviceName, string endpoint = "")
@@ -62,5 +68,25 @@ namespace FrontEnd.Gateway.Infrastructure.NavigateService
         {
             throw new NotImplementedException();
         }
+
+        /*private Task<HttpResponse> SendRequestAsync<T>(string uri, T item, string serviceName, bool readBody = true, bool formatResponse = false, string httpMethod = null)
+        {
+            try
+            {
+                var message = string.Empty;
+
+            }
+            catch (Exception ex)
+            {
+                var errorCode = "error";
+                var response = new { status = new { code = errorCode, msg = ex.Message } };
+
+                var message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(response), Encoding.UTF8, "application/json")
+                };
+                return message;
+            }
+        }*/
     }
 }

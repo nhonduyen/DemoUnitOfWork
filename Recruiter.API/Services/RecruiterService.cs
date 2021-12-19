@@ -87,5 +87,34 @@ namespace Recruiter.API.Services
             result.data.Candidates = candidates;
             return result;
         }
+
+        public async Task<GetCandidatesResult> GetCandidatesByIdsAsync(List<Guid> ids)
+        {
+            var result = new GetCandidatesResult();
+
+            List<CandidateResultVM> InlineFunc(bool isUseTempTable)
+            {
+                var tempQuery = isUseTempTable ? _recruiterContext.TempTableData : ids.AsEnumerable();
+                return _recruiterContext.Repository<Recruiter.Core.Entities.DbModel.Recruiter>()
+                .AsNoTracking()
+                .Include(x => x.Candidates)
+                .Where(x => tempQuery.Contains(x.Id))
+                .Select(x => new CandidateResultVM
+                {
+                    RecruiterId = x.Id,
+                    RecruiterName = x.Name,
+                    Candidates = x.Candidates.Select(a => new CandidateVM
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        RecruiterId = a.RecruiterId
+                    }).ToList()
+                }).ToList();
+            }
+
+            var candidates = await _recruiterUow.GetLargeWhereInSqlTempTableAsync(ids, InlineFunc);
+            result.data.Candidates = candidates;
+            return result;
+        }
     }
 }

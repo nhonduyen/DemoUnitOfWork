@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Options;
 using Recruiter.Core.Entities.DbModel;
 using Recruiter.Core.Entities.DbModel.Bases;
+using Recruiter.Infrastructure.Common;
 
 namespace Recruiter.Infrastructure
 {

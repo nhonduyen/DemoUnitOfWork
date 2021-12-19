@@ -7,6 +7,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Recruiter.API.Controllers
 {
@@ -64,6 +66,21 @@ namespace Recruiter.API.Controllers
             var stringContent = new StringContent(JsonConvert.SerializeObject(department), Encoding.UTF8, "application/json");
             var result = await _httpClientService.SendPostAsync("Management", new Uri($"https://localhost:5001/Department/AddDepartment"), stringContent);
             var response = await result.Content.ReadAsStringAsync();
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCandidatesUseTempTable()
+        {
+            var ids = new List<Guid>();
+            for (var i = 0; i < 500; i++)
+            {
+                ids.Add(Guid.NewGuid());
+            }
+            var candidates = await _recruiterService.GetCandidate();
+            var recruiterIds = candidates.Select(x => x.RecruiterId);
+            ids.AddRange(recruiterIds);
+            var response = await _recruiterService.GetCandidatesByIdsAsync(ids);
             return Ok(response);
         }
 

@@ -20,8 +20,7 @@ namespace Recruiter.API.Extensions
             services.AddScoped(typeof(IUnitOfWorkGeneric<>), typeof(UnitOfWorkGeneric<>));
             services.AddDbContext<RecruiterContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("ManagementConnection"),
-                    providerOptions => providerOptions.CommandTimeout(60));
+                options.UseSqlServer(configuration.GetConnectionString("ManagementConnection"), providerOptions => providerOptions.CommandTimeout(120));
             });
             return services;
         }
