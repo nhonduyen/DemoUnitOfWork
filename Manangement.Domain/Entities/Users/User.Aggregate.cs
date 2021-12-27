@@ -1,4 +1,5 @@
-﻿using Management.Domain.Departments;
+﻿using System;
+using Management.Domain.Departments;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,6 +13,7 @@ namespace Management.Domain.Users
             UserName = username;
             Email = email;
             Password = password;
+            RefreshTokenExpiryTime = DateTime.MinValue;
         }
 
         public bool ValidOnAdd()

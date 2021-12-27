@@ -1,3 +1,5 @@
+using FrontEnd.Gateway.Extensions;
+using FrontEnd.Gateway.Infrastructure.NavigateService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace FrontEnd.Gateway
 {
@@ -21,7 +24,12 @@ namespace FrontEnd.Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCommonCors(Configuration);
             services.AddControllersWithViews();
+            services.AddResponseCaching();
+            services.AddHttpContextAccessor();
+            services.AddHttpClient();
+            services.AddServices();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -49,6 +57,7 @@ namespace FrontEnd.Gateway
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseCommonCors();
 
             app.UseEndpoints(endpoints =>
             {

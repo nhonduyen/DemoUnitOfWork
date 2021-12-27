@@ -49,9 +49,18 @@ namespace Recruiter.Services.Implement
             }
         }
 
-        public Task<HttpResponseMessage> SendPutAsync(string apiName, Uri uri, HttpContent content)
+        public async Task<HttpResponseMessage> SendPutAsync(string apiName, Uri uri, HttpContent content)
         {
-            throw new NotImplementedException();
+            using (var httpClient = _httpClientFactory.CreateClient(apiName))
+            {
+                var httpRequest = new HttpRequestMessage()
+                {
+                    RequestUri = uri,
+                    Method = HttpMethod.Put,
+                    Content = content
+                };
+                return await httpClient.SendAsync(httpRequest).ConfigureAwait(false);
+            }
         }
     }
 }

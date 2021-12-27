@@ -9,6 +9,7 @@ using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 
 namespace Recruiter.API.Controllers
 {
@@ -49,7 +50,7 @@ namespace Recruiter.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDepartmentFromManagement(Guid id)
         {
-            var result = await _httpClientService.SendGetAsync("Management", new Uri($"https://localhost:5001/Department/GetDepartmentById?id={id}"));
+            var result = await _httpClientService.SendGetAsync("Management", new Uri($"https://localhost:5020/Department/GetDepartmentById?id={id}"));
             var response = await result.Content.ReadAsStringAsync();
             return Ok(response);
         }
@@ -63,8 +64,8 @@ namespace Recruiter.API.Controllers
                 DepartmentName = $"department_{Guid.NewGuid():N}",
                 IsDeleted = false,
             };
-            var stringContent = new StringContent(JsonConvert.SerializeObject(department), Encoding.UTF8, "application/json");
-            var result = await _httpClientService.SendPostAsync("Management", new Uri($"https://localhost:5001/Department/AddDepartment"), stringContent);
+            var stringContent = new StringContent(JsonConvert.SerializeObject(department), Encoding.UTF8, MediaTypeNames.Application.Json);
+            var result = await _httpClientService.SendPostAsync("Management", new Uri($"https://localhost:5020/Department/AddDepartment"), stringContent);
             var response = await result.Content.ReadAsStringAsync();
             return Ok(response);
         }
@@ -77,8 +78,8 @@ namespace Recruiter.API.Controllers
             {
                 ids.Add(Guid.NewGuid());
             }
-            var candidates = await _recruiterService.GetCandidate();
-            var recruiterIds = candidates.Select(x => x.RecruiterId);
+            var result = await _recruiterService.GetCandidate();
+            var recruiterIds = result.data.Candidates.Select(x => x.RecruiterId);
             ids.AddRange(recruiterIds);
             var response = await _recruiterService.GetCandidatesByIdsAsync(ids);
             return Ok(response);

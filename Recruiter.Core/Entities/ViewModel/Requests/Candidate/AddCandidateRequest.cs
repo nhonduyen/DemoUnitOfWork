@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Recruiter.Core.Entities.ViewModel.Requests.Candidate
 {
-    public class AddCandidateRequest : BaseRequest
+    public class AddCandidateRequest
     {
         [Required]
         public AddCandidatesRequestPayload payload { get; set; }

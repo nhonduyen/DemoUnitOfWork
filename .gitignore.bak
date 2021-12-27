@@ -269,11 +269,6 @@ FakesAssemblies/
 .ntvs_analysis.dat
 node_modules/
 
-# client-react
-client-react/components/*.js
-client-react.test/build
-!client-react.test/build/client-react/styles/
-
 # Visual Studio 6 build log
 *.plg
 

@@ -9,7 +9,7 @@ namespace Recruiter.API.Services
     public interface IRecruiterService
     {
         Task<int> AddCandidate();
-        Task<List<CandidateResultVM>> GetCandidate();
+        Task<GetCandidatesResult> GetCandidate();
         Task<GetCandidatesResult> GetCandidatePagingAsync(GetCandidatesRequest request);
         Task<GetCandidatesResult> GetCandidatesByIdsAsync(List<Guid> ids);
     }

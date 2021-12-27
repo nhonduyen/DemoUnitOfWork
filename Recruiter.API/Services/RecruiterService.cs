@@ -43,8 +43,9 @@ namespace Recruiter.API.Services
             return result;
         }
 
-        public async Task<List<CandidateResultVM>> GetCandidate()
+        public async Task<GetCandidatesResult> GetCandidate()
         {
+            GetCandidatesResult result = new GetCandidatesResult();
             var candidates = await _recruiterUow.Repository<Recruiter.Core.Entities.DbModel.Recruiter>()
                 .AsNoTracking()
                 .Include(x => x.Candidates)
@@ -60,7 +61,8 @@ namespace Recruiter.API.Services
                     }).ToList()
                 })
                 .ToListAsync();
-            return candidates;
+            result.data.Candidates = candidates;
+            return result;
         }
 
         public async Task<GetCandidatesResult> GetCandidatePagingAsync(GetCandidatesRequest request)

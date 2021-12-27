@@ -13,6 +13,7 @@ namespace Management.Infrastructure.Repositories
         public User NewUser(string username, string email, Department department, string password)
         {
             var user = new User(username, email, department, password);
+            
             if (user.ValidOnAdd())
             {
                 this.Add(user);

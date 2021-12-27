@@ -23,5 +23,6 @@ namespace Management.Domain.Users
         public virtual Department Department { get; set; }
         public virtual ICollection<Salary> Salaries { get; set; }
         public string Password { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

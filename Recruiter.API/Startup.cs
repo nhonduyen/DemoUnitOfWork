@@ -35,6 +35,7 @@ namespace Recruiter.API
         {
             var shareKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityToken:Key"]));
             services.AddControllers();
+            services.AddCommonCors(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recruiter.API", Version = "v1" });
@@ -62,7 +63,7 @@ namespace Recruiter.API
                         RequireSignedTokens = true,
                         // Ensure the token audience matches our audience value (default true):
                         ValidAudience = Configuration["JwtSecurityToken:Audience"],
-                        ValidateAudience = true,
+                        ValidateAudience = false,
                         // Ensure the token was issued by a trusted authorization server (default true):
                         ValidateIssuer = true,
                         ValidIssuer = Configuration["JwtSecurityToken:Issuer"],
@@ -85,6 +86,7 @@ namespace Recruiter.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCommonCors();
 
             app.UseAuthentication();
 
