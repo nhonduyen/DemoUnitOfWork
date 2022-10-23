@@ -12,5 +12,6 @@ namespace Recruiter.API.Services
         Task<GetCandidatesResult> GetCandidate();
         Task<GetCandidatesResult> GetCandidatePagingAsync(GetCandidatesRequest request);
         Task<GetCandidatesResult> GetCandidatesByIdsAsync(List<Guid> ids);
+        Task<List<Recruiter.Core.Entities.DbModel.Recruiter>> GetCandidatesByIdsAsync2(List<Guid> ids);
     }
 }

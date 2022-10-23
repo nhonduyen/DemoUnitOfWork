@@ -5,6 +5,8 @@ using Recruiter.Core.Entities.DbModel.Bases;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Recruiter.Infrastructure.Extensions;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Recruiter.Infrastructure
 {

@@ -9,6 +9,8 @@ using Recruiter.Core.Entities.ViewModel.Responses.Candidate;
 using RecruiterDBModel = Recruiter.Core.Entities.DbModel;
 using Recruiter.Core.Entities.DbModel;
 using Recruiter.Core.Helper;
+using Recruiter.Infrastructure.UnitOfWork;
+using Recruiter.Infrastructure.Extensions;
 
 namespace Recruiter.API.Services
 {
@@ -117,6 +119,25 @@ namespace Recruiter.API.Services
             var candidates = await _recruiterUow.GetLargeWhereInSqlTempTableAsync(ids, InlineFunc);
             result.data.Candidates = candidates;
             return result;
+        }
+
+        public async Task<List<Recruiter.Core.Entities.DbModel.Recruiter>> GetCandidatesByIdsAsync2(List<Guid> ids)
+        {
+            var candidates = await _recruiterContext.WhereBulkContainsAsync<Recruiter.Core.Entities.DbModel.Recruiter>
+                (
+                    listWhereInIds: ids,
+                    tempTable: _recruiterUow.GetContext().TempTableData,
+                    keyContains: nameof(Recruiter.Core.Entities.DbModel.Recruiter.Id),
+                    extraCondition: x => x.IsActive,
+                    isTracking: false,
+                    selector: x => new Recruiter.Core.Entities.DbModel.Recruiter
+                    {
+                        Name = x.Name,
+                        Candidates = x.Candidates,
+                        IsActive = x.IsActive
+                    }
+                ); 
+            return candidates;
         }
     }
 }

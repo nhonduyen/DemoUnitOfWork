@@ -6,6 +6,9 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Recruiter.Infrastructure.Common;
 using Microsoft.Data.SqlClient;
+using System.Linq.Expressions;
+using Context = Microsoft.EntityFrameworkCore.DbContext;
+using System.Reflection;
 
 namespace Recruiter.Infrastructure.Extensions
 {
@@ -74,6 +77,125 @@ namespace Recruiter.Infrastructure.Extensions
                 var sqlCommand = $@"IF OBJECT_ID(N'tempdb..{tableTemp}') IS NOT NULL DROP TABLE {tableTemp};";
                 var rowEffected = await dbContext.Database.ExecuteSqlRawAsync(sqlCommand);
                 result = rowEffected > 0;
+            }
+            return result;
+        }
+
+        public static async Task<List<TEntity>> AsPageOrderedListAsync<TEntity>(this IQueryable<TEntity> query, bool isOrderedById = false, int count = -1, int pageSize = 10000)
+        {
+            List<TEntity> result = new List<TEntity>();
+
+            if (count == -1)
+            {
+                count = await query.CountAsync();
+            }
+            var totalPage = Math.Ceiling((decimal)count / pageSize);
+
+            // In case the query has ordered by != Id or no paging
+            if (!isOrderedById || totalPage <= 1)
+            {
+                for (int page = 0; page < totalPage; page++)
+                {
+                    var items = await query.Skip(page * pageSize).Take(pageSize).ToListAsync();
+                    result.AddRange(items);
+                }
+
+                return result;
+            }
+
+            // In case the query has ordered by Id and paging
+            object lastIdValue = null;
+            bool isGuidId = typeof(IGuidKeyEntity).GetTypeInfo().IsAssignableFrom(typeof(TEntity).Ge‌​tTypeInfo());
+            bool isIntId = typeof(IIntKeyEntity).GetTypeInfo().IsAssignableFrom(typeof(TEntity).Ge‌​tTypeInfo());
+
+            for (int page = 0; page < totalPage; page++)
+            {
+                List<TEntity> items = new List<TEntity>();
+                if (lastIdValue != null && isGuidId)
+                {
+                    items = await query.Where(x => ((IGuidKeyEntity)x).Id.CompareTo((Guid)lastIdValue) > 0).Take(pageSize).ToListAsync();
+                }
+                else if (lastIdValue != null && isIntId)
+                {
+                    items = await query.Where(x => ((IIntKeyEntity)x).Id > (int)lastIdValue).Take(pageSize).ToListAsync();
+                }
+                else
+                {
+                    items = await query.Skip(page * pageSize).Take(pageSize).ToListAsync();
+                }
+
+                if ((page < totalPage - 1) && (isGuidId || isIntId))
+                {
+                    var lastItem = items.LastOrDefault();
+                    if (lastItem != null)
+                    {
+                        lastIdValue = typeof(TEntity).GetProperty("Id")?.GetValue(lastItem, null);
+                    }
+                    else
+                        lastIdValue = null;
+                }
+
+                result.AddRange(items);
+            }
+
+            return result;
+        }
+
+        public static async Task<List<TEntity>> WhereBulkContainsAsync<TEntity>(this Context dbContext, List<Guid> listWhereInIds, IQueryable<Guid> tempTable, string keyContains, Expression<Func<TEntity, TEntity>> selector = null, Expression<Func<TEntity, object>> orderBy = null, bool isTracking = false, int batchRead = 10000, Expression<Func<TEntity, bool>> extraCondition = null, params Expression<Func<TEntity, Object>>[] includes)
+            where TEntity : class
+        {
+            const int MinimumIdsForCreateTempTable = 300;
+            var result = new List<TEntity>();
+
+            if (listWhereInIds.Count == 0)
+                return await Task.FromResult(result);
+
+            var query = isTracking ? dbContext.Set<TEntity>() : dbContext.Set<TEntity>().AsNoTracking();
+
+            if (includes != null && includes.Length > 0)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            var useTempTable = listWhereInIds.Count > MinimumIdsForCreateTempTable;
+            var collectionIds = useTempTable ? tempTable : listWhereInIds.AsEnumerable();
+
+            query = query.Where(p => collectionIds.Contains(EF.Property<Guid>(p, keyContains)));
+
+            if (extraCondition != null)
+            {
+                query = query.Where(extraCondition);
+            }
+
+            if (useTempTable)
+            {
+                await dbContext.CreateTempTableAsync($"#{nameof(Common.TempTableData)}", listWhereInIds);
+            }
+
+            var count = await query.CountAsync();
+            var isOrderedById = false;
+            if (orderBy != null)
+            {
+                query = query.OrderBy(orderBy);
+            }
+            else if (count > batchRead)
+            {
+                query = query.OrderBy(p => EF.Property<object>(p, "Id"));
+                isOrderedById = true;
+            }
+
+            if (selector != null)
+            {
+                query = query.Select(selector);
+            }
+
+            result = await query.AsPageOrderedListAsync(isOrderedById, count, batchRead);
+            if (useTempTable)
+            {
+                await dbContext.DeleteTempTableAsync($"#{nameof(Common.TempTableData)}");
             }
             return result;
         }

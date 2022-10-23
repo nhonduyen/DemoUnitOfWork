@@ -85,5 +85,19 @@ namespace Recruiter.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetCandidatesUseTempTable2()
+        {
+            var ids = new List<Guid>();
+            for (var i = 0; i < 5000; i++)
+            {
+                ids.Add(Guid.NewGuid());
+            }
+            var result = await _recruiterService.GetCandidate();
+            var recruiterIds = result.data.Candidates.Select(x => x.RecruiterId);
+            ids.AddRange(recruiterIds);
+            var response = await _recruiterService.GetCandidatesByIdsAsync2(ids);
+            return Ok(response);
+        }
     }
 }
